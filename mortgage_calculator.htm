@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html
+<head>
+    <meta charset="UTF-8">
+    <title>Mortgage Calculator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<script>
+
+$(document).ready(function () {
+
+$('#mortgage_calculator').click(function() {
+  $('#mortCalc').toggle();
+});
+
+$('.close').click(function() {
+  $('.modal').hide();
+});
+
+$('.close_btn').click(function() {
+  $('.modal').hide();
+});
+
+$('#calculate').click(function() {
+  var noCommas = $("#loan").val().split(",").join("");
+  var loan = parseInt(noCommas);
+  var rate = parseFloat($('#rate').val());
+  rate = ((rate / 100) / 12);
+  var years = parseInt($('#years').val());
+  years = (years * 12);
+  var error = '';
+
+  if (isNaN(loan) || loan <= 0) {
+      error = 'Loan must be a numeric value greater than 0';
+      $('#loan').focus();
+  } else if (isNaN(rate) || rate <= 0 || rate > 15) {
+      error = 'Rate must be a numeric value greater than 0 up to 15';
+      $('#rate').focus();
+  } else if (isNaN(years) || years <= 0 || years > 360) {
+      error = 'Years must be a numeric value greater than 0 up to 30';
+      $('#years').focus();
+  }
+
+
+  if (error == '') {
+    var calculate = (loan * ((rate * (1 + rate) ** years) / (((1 + rate) ** years) -1)));
+      $('#mortgage').val(parseInt(calculate));
+  } else {
+      alert(error);
+  }
+
+});
+
+});
+
+</script>
+
+    <style>
+
+    .modal {
+     display: none;
+     position: fixed;
+     z-index: 1;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    left: 0;
+    top: 0;
+    }
+
+
+    .modal_content {
+     background-color: #fefefe;
+     padding: 20px;
+     border: 1px solid #888;
+     margin: 15% auto;
+     width: 40%;
+     border-radius: 8px;
+    }
+
+    .modal_content h3 {
+      text-align: center;
+    }
+
+    .modal_content input {
+      margin-bottom: 15px!important;
+    }
+
+
+    .close {
+     color: #aaa;
+     float: right;
+     font-size: 28px;
+     font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+     color: black;
+     text-decoration: none;
+     cursor: pointer;
+    }
+
+    .close_btn {
+      background-color: red;
+      color: white;
+      float: right;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .modal_footer {
+      padding-bottom: 20px;
+    }
+
+    #calculate {
+      margin-left: 40%;
+    }
+
+    @media screen and (max-width: 768px) {
+      .modal_content {
+        width: 80%;
+      }
+    }
+
+</style>
+</head>
+
+<body>
+  <a id='mortgage_calculator' href='#mortCalc'>Mortgage Calculator</a>
+    <div class='modal' id='mortCalc'>
+      <div class='modal_content'>
+        <div class='modal_body'>
+        <span class="close">&times;</span>
+        <h3>Mortgage Calculator</h3>
+        <hr>
+        <label for="loan">Loan Amount:</label>
+        <input type="text" id="loan" value='250,000'><br>
+
+        <label for="rate">Annual Interest Rate: %</label>
+        <input type="text" id="rate" value='4'><br>
+
+        <label for="years">Term of Loan (Years):</label>
+        <input type="text" id="years" value='30'><br>
+
+        <label>&nbsp;</label>
+        <input type="button" id="calculate" value="Calculate"><br>
+
+        <label for="mortgage">Monthly Payment: $</label>
+        <input type="text" id="mortgage" disabled><br><hr>
+      </div>
+      <div class='modal_footer'>
+        <button class='close_btn'>Close</button>
+      </div>
+      </div>
+</div><!--Calculator Modal -->
+
+</body>
+</html>
